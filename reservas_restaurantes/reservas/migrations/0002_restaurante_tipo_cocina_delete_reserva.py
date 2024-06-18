@@ -10,11 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='restaurante',
-            name='tipo_cocina',
-            field=models.CharField(default='Español', max_length=100),
-        ),
         migrations.DeleteModel(
             name='Reserva',
         ),

@@ -1,25 +1,40 @@
-from django.shortcuts import render
+
 # from django.views.generic import CreateView, ListView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework import status
 from .models import Restaurante, Reserva_restaurante
 from .serializers import RestauranteSerializer, Reserva_restauranteSerializer
+from rest_framework import generics, permissions, authentication, status, viewsets
 
 # crear y mostrar lista get y post de restaurantes con vista genérica
 class RestauranteListView(generics.ListCreateAPIView):
     queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
+
+
 # Detalle, Actualización y Eliminación de restaurantes con vista generica
 class RestauranteRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
+
+class RestauranteViewSet(viewsets.ModelViewSet):
+    queryset = Restaurante.objects.all()
+    serializer_class = RestauranteSerializer
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
+
 # detail Muestra los detalles de un restaurante con vista generica
 class RestauranteDetailView(generics.RetrieveAPIView):
     queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
+
 
 # post de resuataurantes con api view
 class RestauranteCreateView(APIView):
@@ -29,6 +44,8 @@ class RestauranteCreateView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
 
 # delete all, borrar todos los datos 
 class RestauranteDeleteAllView(generics.GenericAPIView):
@@ -58,6 +75,7 @@ class Reserva_restauranteListView(generics.ListCreateAPIView):
 class Reserva_restauranteRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reserva_restaurante.objects.all()
     serializer_class = Reserva_restauranteSerializer
+    
     
 # detail
 class Reserva_restauranteDetailView(generics.RetrieveAPIView):

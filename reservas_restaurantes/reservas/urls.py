@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import (
     Reserva_restauranteCreateView,
     RestauranteCreateView,
@@ -11,10 +12,15 @@ from .views import (
     Reserva_restauranteDetailView,
     Reserva_restauranteDeleteAllView,
     CreateReservaForRestauranteView,
-    CustomAPIView
+    CustomAPIView,
+    RestauranteViewSet,
 )
+# Se crea un router y registra el viewset
+router = DefaultRouter()
+router.register(r'restaurantes', RestauranteViewSet)
 
 urlpatterns = [
+    path('', include(router.urls)),
     #  get de la lista de restaurantes
     path('restaurantes/', RestauranteListView.as_view(), name='restaurante-list'), 
     # post de un restaurante
